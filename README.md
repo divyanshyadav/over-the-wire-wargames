@@ -5,3 +5,8 @@ This is the automated wargame solver using config file.
 ## Wargame
 
 - [ ] Bandit
+
+## Scripts
+
+`npm install`
+`npm start`

@@ -1,6 +1,6 @@
 const { exec, shell } = require("./ssh");
 
-function crack({ host, port, levels } = {}) {
+function solve({ host, port, levels } = {}) {
     let promise = Promise.resolve(levels[0].password);
 
     levels.forEach((level) => {
@@ -21,4 +21,4 @@ function crack({ host, port, levels } = {}) {
     promise.then((flag) => console.log(flag));
 }
 
-module.exports = { crack };
+module.exports = { solve };

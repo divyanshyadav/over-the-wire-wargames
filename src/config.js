@@ -8,7 +8,24 @@ module.exports = {
             { username: "bandit2", cmd: "cat spaces\\ in\\ this\\ filename" },
             { username: "bandit3", cmd: "cat inhere/.hidden" },
             { username: "bandit4", cmd: "cat /home/bandit4/inhere/-file07" },
-            { username: "bandit5", cmd: "", shell: true },
+            {
+                username: "bandit5",
+                cmd: "find . -type f -size 1033c -exec cat {} \\;",
+            },
+            {
+                username: "bandit6",
+                cmd: "find / -type f -user bandit7 -group bandit6 -size 33c -exec cat {} \\; 2>/dev/null",
+            },
+            {
+                username: "bandit7",
+                cmd: "cat data.txt | grep millionth | cut -b 11-",
+                // shell: true,
+            },
+            {
+                username: "bandit8",
+                // cmd: "cat data.txt | grep millionth | cut -b 11-",
+                shell: true,
+            },
         ],
     },
 };

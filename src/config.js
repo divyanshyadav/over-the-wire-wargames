@@ -19,11 +19,26 @@ module.exports = {
             {
                 username: "bandit7",
                 cmd: "cat data.txt | grep millionth | cut -b 11-",
-                // shell: true,
             },
             {
                 username: "bandit8",
-                // cmd: "cat data.txt | grep millionth | cut -b 11-",
+                cmd: "sort data.txt | uniq -u",
+            },
+            {
+                username: "bandit9",
+                cmd: "strings data.txt | grep '&=' | cut -b 13-",
+            },
+            {
+                username: "bandit10",
+                cmd: "cat data.txt | base64 -d | cut -b 17-",
+            },
+            {
+                username: "bandit11",
+                cmd: "cat data.txt | tr '[a-zA-Z]' '[n-za-mN-ZA-M]' | cut -b 17-",
+            },
+            {
+                username: "bandit12",
+                cmd: "cat data.txt | tr '[a-z]' '[n-za-m]' | cut -b 16-",
                 shell: true,
             },
         ],

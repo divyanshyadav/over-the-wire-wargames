@@ -29,7 +29,7 @@ function solve({ host, port, levels } = {}) {
         });
     });
 
-    promise.then((flag) => console.log(flag));
+    return promise.then((flag) => console.log(flag));
 }
 
 module.exports = { solve };

@@ -1,8 +1,10 @@
 const { solve } = require("./utils/wargame");
-const wargames = require("./config");
+const wargames = require("./wargames");
 
-function main() {
-    solve(wargames.bandit);
+async function main() {
+    for (let wargame of Object.values(wargames)) {
+        await solve(wargame);
+    }
 }
 
 main();

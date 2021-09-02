@@ -1,16 +1,16 @@
-const Cache = require("./cache");
+const LocalStorage = require("./local-storage");
 const { exec, shell } = require("./ssh");
 
 function solve({ host, port, levels } = {}) {
-    const cache = new Cache();
+    const localStorage = new LocalStorage();
     let promise = Promise.resolve(levels[0].password);
 
     levels.forEach((level) => {
         promise = promise.then((flag) => {
             console.log(level.username, flag, level.cmd);
 
-            if (cache.has(level.username)) {
-                return Promise.resolve(cache.get(level.username));
+            if (localStorage.has(level.username)) {
+                return Promise.resolve(localStorage.get(level.username));
             }
 
             const config = {
@@ -23,7 +23,7 @@ function solve({ host, port, levels } = {}) {
             if (level.shell) return shell(config);
 
             return exec(level.cmd, config).then((flag) => {
-                cache.set(level.username, flag);
+                localStorage.set(level.username, flag);
                 return Promise.resolve(flag);
             });
         });

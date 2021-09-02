@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-class Cache {
+class LocalStorage {
     constructor(filePath = ".cache") {
         this.filePath = filePath;
         this.map = this._read(this.filePath);
@@ -37,4 +37,4 @@ class Cache {
     }
 }
 
-module.exports = Cache;
+module.exports = LocalStorage;

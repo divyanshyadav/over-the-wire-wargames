@@ -31,7 +31,29 @@ function exec(cmd, { host, port, username, password } = {}) {
     });
 }
 
-const pipeStream = (stream, onClose) => {
+function shell({ host, port, username, password } = {}) {
+    return new Promise((resolve, reject) => {
+        const client = new Client();
+        client
+            .on("ready", () => {
+                client.shell((err, stream) => {
+                    if (err) throw reject(err);
+                    pipeStream(stream, () => {
+                        client.end();
+                        resolve();
+                    });
+                });
+            })
+            .connect({
+                host,
+                port,
+                username,
+                password,
+            });
+    });
+}
+
+function pipeStream(stream, onClose) {
     const readLine = readline.createInterface(process.stdin, process.stdout);
 
     stream
@@ -54,28 +76,6 @@ const pipeStream = (stream, onClose) => {
             readline.close();
             onClose();
         });
-};
-
-function shell({ host, port, username, password } = {}) {
-    return new Promise((resolve, reject) => {
-        const client = new Client();
-        client
-            .on("ready", () => {
-                client.shell((err, stream) => {
-                    if (err) throw reject(err);
-                    pipeStream(stream, () => {
-                        client.end();
-                        resolve();
-                    });
-                });
-            })
-            .connect({
-                host,
-                port,
-                username,
-                password,
-            });
-    });
 }
 
 module.exports = {

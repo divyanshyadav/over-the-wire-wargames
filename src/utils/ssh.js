@@ -1,23 +1,23 @@
-const { Client } = require("ssh2");
-var readline = require("readline");
+const { Client } = require('ssh2');
+const readline = require('readline');
 
 function exec(cmd, { host, port, username, password } = {}) {
     return new Promise((resolve, reject) => {
         const client = new Client();
         client
-            .on("ready", () => {
+            .on('ready', () => {
                 client.exec(cmd, (err, stream) => {
                     if (err) throw reject(err);
                     const buffer = [];
                     stream
-                        .on("close", (code, signal) => {
+                        .on('close', (code, signal) => {
                             client.end();
-                            resolve(buffer.join("").trim());
+                            resolve(buffer.join('').trim());
                         })
-                        .on("data", (data) => {
+                        .on('data', data => {
                             buffer.push(data);
                         })
-                        .stderr.on("data", (data) => {
+                        .stderr.on('data', data => {
                             buffer.push(data);
                         });
                 });
@@ -35,7 +35,7 @@ function shell({ host, port, username, password } = {}) {
     return new Promise((resolve, reject) => {
         const client = new Client();
         client
-            .on("ready", () => {
+            .on('ready', () => {
                 client.shell((err, stream) => {
                     if (err) throw reject(err);
                     pipeStream(stream, () => {
@@ -54,25 +54,39 @@ function shell({ host, port, username, password } = {}) {
 }
 
 function pipeStream(stream, onClose) {
-    const readLine = readline.createInterface(process.stdin, process.stdout);
+    const readLine = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+        terminal: false,
+    });
 
+    let lastCmd = '';
     stream
-        .on("close", () => {
+        .on('close', () => {
             onClose();
         })
-        .on("data", (data) => {
+        .on('readable', function () {
+            const buffer = [];
+            while ((chunk = this.read())) {
+                buffer.push(chunk.toString());
+            }
+
+            const data = buffer.join('');
+            if (data.trim() === lastCmd.trim()) return;
             process.stdin.pause();
             process.stdout.write(data);
             process.stdin.resume();
         });
 
     readLine
-        .on("line", (data) => {
-            stream.write(data.trim() + "\n");
+        .on('line', data => {
+            const cmd = data;
+            stream.write(cmd + '\n');
+            lastCmd = cmd;
         })
-        .on("SIGINT", () => {
+        .on('SIGINT', () => {
             process.stdin.pause();
-            process.stdout.write("\nEnding session\n");
+            process.stdout.write('\nEnding session\n');
             readline.close();
             onClose();
         });

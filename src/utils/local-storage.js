@@ -1,8 +1,13 @@
 const fs = require('fs')
-const { createSingleton } = require('./design-patterns')
 
 class LocalStorage {
     constructor(filePath = '.cache') {
+        if (!LocalStorage.instance) {
+            LocalStorage.instance = this
+        } else {
+            return LocalStorage.instance
+        }
+
         this.filePath = filePath
         this.map = this._read(this.filePath)
     }
@@ -38,4 +43,4 @@ class LocalStorage {
     }
 }
 
-module.exports = createSingleton(LocalStorage)
+module.exports = LocalStorage

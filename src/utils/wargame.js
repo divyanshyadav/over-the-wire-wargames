@@ -2,7 +2,7 @@ const LocalStorage = require('./local-storage')
 const { exec, shell } = require('./ssh')
 
 function solve({ name, host, port, levels } = {}) {
-    const localStorage = LocalStorage.getInstance()
+    const localStorage = new LocalStorage()
     let promise = Promise.resolve(levels[0].password)
 
     levels.forEach((level, index) => {

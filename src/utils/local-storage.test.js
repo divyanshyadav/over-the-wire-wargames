@@ -1,8 +1,8 @@
 const LocalStorage = require('./local-storage')
 
-test('getInstance should give same instance every time', () => {
-    const localStorage = LocalStorage.getInstance()
+test('new operator should return same instance every time', () => {
+    const localStorage = new LocalStorage()
 
-    expect(localStorage).toBe(LocalStorage.getInstance())
-    expect(localStorage).toBe(LocalStorage.getInstance())
+    expect(localStorage).toBe(new LocalStorage())
+    expect(localStorage).toBe(new LocalStorage())
 })
